@@ -1,0 +1,384 @@
+<html>
+<head>
+<title>Program.cs</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #6c95eb;}
+.s1 { color: #d0d0d0;}
+.s2 { color: #bdbdbd;}
+.s3 { color: #85c46c; font-style: italic;}
+.s4 { color: #c9a26d;}
+.s5 { color: #ed94c0;}
+</style>
+</head>
+<body bgcolor="#191a1c">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Program.cs</font>
+</center></td></tr></table>
+<pre><span class="s0">using </span><span class="s1">System</span><span class="s2">;</span>
+<span class="s0">using </span><span class="s1">System</span><span class="s2">.</span><span class="s1">Collections</span><span class="s2">.</span><span class="s1">Generic</span><span class="s2">;</span>
+
+<span class="s3">// The namespace acts as a container for code.</span>
+<span class="s0">namespace </span><span class="s1">CafeManager</span>
+<span class="s2">{</span>
+    <span class="s3">// The static class holds all methods and data, replaces Python's global scope.</span>
+    <span class="s0">public static class </span><span class="s1">CafeManager</span>
+    <span class="s2">{</span>
+        <span class="s3">// ====================================================================</span>
+        <span class="s3">// 1. STATIC FIELDS (Constants and Global Data)</span>
+        <span class="s3">// ====================================================================</span>
+
+        <span class="s0">public const string </span><span class="s1">CAFE_NAME </span><span class="s2">= </span><span class="s4">&quot;Campus Café&quot;</span><span class="s2">;</span>
+        <span class="s0">public const double </span><span class="s1">TAX_RATE </span><span class="s2">= </span><span class="s5">0.095</span><span class="s2">;</span>
+        <span class="s0">public const string </span><span class="s1">DISCOUNT_CODE </span><span class="s2">= </span><span class="s4">&quot;STUDENT10&quot;</span><span class="s2">;</span>
+        <span class="s0">public const double </span><span class="s1">DISCOUNT_RATE </span><span class="s2">= </span><span class="s5">0.10</span><span class="s2">;</span>
+
+        <span class="s3">// C# List&lt;T&gt; requires specifying the data type (string, double, int).</span>
+        <span class="s0">private static </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s0">string</span><span class="s2">&gt; </span><span class="s1">item_names </span><span class="s2">= </span><span class="s0">new </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s0">string</span><span class="s2">&gt;();</span>
+        <span class="s0">private static </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s0">double</span><span class="s2">&gt; </span><span class="s1">item_prices </span><span class="s2">= </span><span class="s0">new </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s0">double</span><span class="s2">&gt;();</span>
+        <span class="s0">private static </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s0">int</span><span class="s2">&gt; </span><span class="s1">item_quantities </span><span class="s2">= </span><span class="s0">new </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s0">int</span><span class="s2">&gt;();</span>
+
+        <span class="s3">// 'bool' is the C# type for True/False (lowercase values).</span>
+        <span class="s0">private static bool </span><span class="s1">discount_applied_this_session </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+
+        <span class="s3">// ====================================================================</span>
+        <span class="s3">// 2. ENTRY POINT (The Traditional Main Method)</span>
+        <span class="s3">// ====================================================================</span>
+
+        <span class="s3">// This is the required start method when &quot;No Top-Level Statements&quot; is selected.</span>
+        <span class="s0">public static void </span><span class="s1">Main</span><span class="s2">(</span><span class="s0">string</span><span class="s2">[] </span><span class="s1">args</span><span class="s2">)</span>
+        <span class="s2">{</span>
+            <span class="s1">main_menu</span><span class="s2">(); </span><span class="s3">// Starts the core application loop.</span>
+        <span class="s2">}</span>
+
+        <span class="s3">// ====================================================================</span>
+        <span class="s3">// 3. UTILITY METHODS (Core Logic)</span>
+        <span class="s3">// ====================================================================</span>
+
+        <span class="s0">public static void </span><span class="s1">show_banner</span><span class="s2">()</span>
+        <span class="s2">{</span>
+            <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s0">new string</span><span class="s2">(</span><span class="s4">'='</span><span class="s2">, </span><span class="s5">40</span><span class="s2">));</span>
+            <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">$&quot;</span><span class="s2">{</span><span class="s1">CAFE_NAME</span><span class="s2">} </span><span class="s4">- Tax Rate: </span><span class="s2">{</span><span class="s1">TAX_RATE:F3</span><span class="s2">}</span><span class="s4">&quot;</span><span class="s2">);</span>
+            <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s0">new string</span><span class="s2">(</span><span class="s4">'='</span><span class="s2">, </span><span class="s5">40</span><span class="s2">));</span>
+        <span class="s2">}</span>
+
+        <span class="s0">public static double </span><span class="s1">compute_subtotal</span><span class="s2">()</span>
+        <span class="s2">{</span>
+            <span class="s0">double </span><span class="s1">subtotal </span><span class="s2">= </span><span class="s5">0.0</span><span class="s2">;</span>
+            <span class="s3">// C-style loop uses .Count instead of len(list).</span>
+            <span class="s0">for </span><span class="s2">(</span><span class="s0">int </span><span class="s1">i </span><span class="s2">= </span><span class="s5">0</span><span class="s2">; </span><span class="s1">i </span><span class="s2">&lt; </span><span class="s1">item_names</span><span class="s2">.</span><span class="s1">Count</span><span class="s2">; </span><span class="s1">i</span><span class="s2">++)</span>
+            <span class="s2">{</span>
+                <span class="s1">subtotal </span><span class="s2">+= </span><span class="s1">item_prices</span><span class="s2">[</span><span class="s1">i</span><span class="s2">] * </span><span class="s1">item_quantities</span><span class="s2">[</span><span class="s1">i</span><span class="s2">];</span>
+            <span class="s2">}</span>
+            <span class="s0">return </span><span class="s1">subtotal</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s0">public static double </span><span class="s1">compute_tax</span><span class="s2">(</span><span class="s0">double </span><span class="s1">subtotal</span><span class="s2">, </span><span class="s0">double </span><span class="s1">tax_rate</span><span class="s2">)</span>
+        <span class="s2">{</span>
+            <span class="s0">return </span><span class="s1">subtotal </span><span class="s2">* </span><span class="s1">tax_rate</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s0">public static void </span><span class="s1">add_item</span><span class="s2">(</span><span class="s0">string </span><span class="s1">name</span><span class="s2">, </span><span class="s0">double </span><span class="s1">price</span><span class="s2">, </span><span class="s0">int </span><span class="s1">qty</span><span class="s2">)</span>
+        <span class="s2">{</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s0">string</span><span class="s2">.</span><span class="s1">IsNullOrEmpty</span><span class="s2">(</span><span class="s1">name</span><span class="s2">)) </span><span class="s3">// C# check for empty/null string.</span>
+            <span class="s2">{</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;Error: Item name cannot be empty, idiot!&quot;</span><span class="s2">);</span>
+                <span class="s0">return</span><span class="s2">;</span>
+            <span class="s2">}</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">price </span><span class="s2">&lt; </span><span class="s5">0.0</span><span class="s2">)</span>
+            <span class="s2">{</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;Error: Item price must be positive, dumbdumb!&quot;</span><span class="s2">);</span>
+                <span class="s0">return</span><span class="s2">;</span>
+            <span class="s2">}</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">qty </span><span class="s2">&lt;= </span><span class="s5">0</span><span class="s2">)</span>
+            <span class="s2">{</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;Error: Item quantity must be at least 1, you mouthbreather!&quot;</span><span class="s2">);</span>
+                <span class="s0">return</span><span class="s2">;</span>
+            <span class="s2">}</span>
+
+            <span class="s3">// List&lt;T&gt;.Add() replaces Python's list.append().</span>
+            <span class="s1">item_names</span><span class="s2">.</span><span class="s1">Add</span><span class="s2">(</span><span class="s1">name</span><span class="s2">);</span>
+            <span class="s1">item_prices</span><span class="s2">.</span><span class="s1">Add</span><span class="s2">(</span><span class="s1">price</span><span class="s2">);</span>
+            <span class="s1">item_quantities</span><span class="s2">.</span><span class="s1">Add</span><span class="s2">(</span><span class="s1">qty</span><span class="s2">);</span>
+            <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">$&quot;Added </span><span class="s2">{</span><span class="s1">name</span><span class="s2">} </span><span class="s4">x </span><span class="s2">{</span><span class="s1">qty</span><span class="s2">} </span><span class="s4">@ $</span><span class="s2">{</span><span class="s1">price:F2</span><span class="s2">}</span><span class="s4">&quot;</span><span class="s2">);</span>
+        <span class="s2">}</span>
+
+        <span class="s0">public static void </span><span class="s1">remove_item</span><span class="s2">(</span><span class="s0">int </span><span class="s1">index</span><span class="s2">)</span>
+        <span class="s2">{</span>
+            <span class="s0">int </span><span class="s1">actual_index </span><span class="s2">= </span><span class="s1">index </span><span class="s2">- </span><span class="s5">1</span><span class="s2">;</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">actual_index </span><span class="s2">&gt;= </span><span class="s5">0 </span><span class="s2">&amp;&amp; </span><span class="s1">actual_index </span><span class="s2">&lt; </span><span class="s1">item_names</span><span class="s2">.</span><span class="s1">Count</span><span class="s2">) </span><span class="s3">// Uses &amp;&amp; (AND).</span>
+            <span class="s2">{</span>
+                <span class="s0">string </span><span class="s1">removed_name </span><span class="s2">= </span><span class="s1">item_names</span><span class="s2">[</span><span class="s1">actual_index</span><span class="s2">];</span>
+                <span class="s1">item_names</span><span class="s2">.</span><span class="s1">RemoveAt</span><span class="s2">(</span><span class="s1">actual_index</span><span class="s2">); </span><span class="s3">// Removes item by index.</span>
+                <span class="s1">item_prices</span><span class="s2">.</span><span class="s1">RemoveAt</span><span class="s2">(</span><span class="s1">actual_index</span><span class="s2">);</span>
+                <span class="s1">item_quantities</span><span class="s2">.</span><span class="s1">RemoveAt</span><span class="s2">(</span><span class="s1">actual_index</span><span class="s2">);</span>
+
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">$&quot;Removed '</span><span class="s2">{</span><span class="s1">removed_name</span><span class="s2">}</span><span class="s4">' from the cart.&quot;</span><span class="s2">);</span>
+            <span class="s2">}</span>
+            <span class="s0">else</span>
+            <span class="s2">{</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;Error: Invalid item index, idiot!&quot;</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+
+        <span class="s0">public static void </span><span class="s1">clear_cart</span><span class="s2">()</span>
+        <span class="s2">{</span>
+            <span class="s1">item_names</span><span class="s2">.</span><span class="s1">Clear</span><span class="s2">(); </span><span class="s3">// Clears all lists.</span>
+            <span class="s1">item_prices</span><span class="s2">.</span><span class="s1">Clear</span><span class="s2">();</span>
+            <span class="s1">item_quantities</span><span class="s2">.</span><span class="s1">Clear</span><span class="s2">();</span>
+
+            <span class="s1">discount_applied_this_session </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+            <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;\nYour cart has been cleared.&quot;</span><span class="s2">);</span>
+        <span class="s2">}</span>
+
+        <span class="s0">public static double </span><span class="s1">apply_discount</span><span class="s2">(</span><span class="s0">double </span><span class="s1">subtotal</span><span class="s2">, </span><span class="s0">string </span><span class="s1">code</span><span class="s2">)</span>
+        <span class="s2">{</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">code </span><span class="s2">== </span><span class="s1">DISCOUNT_CODE </span><span class="s2">&amp;&amp; </span><span class="s1">!discount_applied_this_session</span><span class="s2">)</span>
+            <span class="s2">{</span>
+                <span class="s1">discount_applied_this_session </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;STUDENT10 discount applied! You saved 10 percent, cheakspate turdburglar!&quot;</span><span class="s2">);</span>
+                <span class="s0">return </span><span class="s1">subtotal </span><span class="s2">* </span><span class="s1">DISCOUNT_RATE</span><span class="s2">;</span>
+            <span class="s2">}</span>
+            <span class="s0">else if </span><span class="s2">(</span><span class="s1">code </span><span class="s2">== </span><span class="s1">DISCOUNT_CODE </span><span class="s2">&amp;&amp; </span><span class="s1">discount_applied_this_session</span><span class="s2">)</span>
+            <span class="s2">{</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;Discount code has already been used this session! The FBI has been notified.&quot;</span><span class="s2">);</span>
+                <span class="s0">return </span><span class="s5">0.0</span><span class="s2">;</span>
+            <span class="s2">}</span>
+            <span class="s0">else</span>
+            <span class="s2">{</span>
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">!</span><span class="s0">string</span><span class="s2">.</span><span class="s1">IsNullOrEmpty</span><span class="s2">(</span><span class="s1">code</span><span class="s2">))</span>
+                <span class="s2">{</span>
+                    <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;Error: Invalid discount code, cheapskate turdburglar!&quot;</span><span class="s2">);</span>
+                <span class="s2">}</span>
+                <span class="s0">return </span><span class="s5">0.0</span><span class="s2">;</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+
+        <span class="s0">public static void </span><span class="s1">apply_discount_from_menu</span><span class="s2">()</span>
+        <span class="s2">{</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">item_names</span><span class="s2">.</span><span class="s1">Count </span><span class="s2">== </span><span class="s5">0</span><span class="s2">)</span>
+            <span class="s2">{</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;Your cart is empty. Add items before applying a discount. Holy Satan, you are simple!&quot;</span><span class="s2">);</span>
+                <span class="s0">return</span><span class="s2">;</span>
+            <span class="s2">}</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">discount_applied_this_session</span><span class="s2">)</span>
+            <span class="s2">{</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;A discount has already been applied to this order, the FBI has been notified!&quot;</span><span class="s2">);</span>
+                <span class="s0">return</span><span class="s2">;</span>
+            <span class="s2">}</span>
+
+            <span class="s0">double </span><span class="s1">subtotal </span><span class="s2">= </span><span class="s1">compute_subtotal</span><span class="s2">();</span>
+
+            <span class="s1">Console</span><span class="s2">.</span><span class="s1">Write</span><span class="s2">(</span><span class="s4">&quot;Enter discount code, you cheapskate: &quot;</span><span class="s2">);</span>
+            <span class="s0">string </span><span class="s1">user_code </span><span class="s2">= </span><span class="s1">Console</span><span class="s2">.</span><span class="s1">ReadLine</span><span class="s2">();</span>
+
+            <span class="s0">double </span><span class="s1">discount_amount </span><span class="s2">= </span><span class="s1">apply_discount</span><span class="s2">(</span><span class="s1">subtotal</span><span class="s2">, </span><span class="s1">user_code</span><span class="s2">);</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">discount_amount </span><span class="s2">&gt; </span><span class="s5">0.0</span><span class="s2">)</span>
+            <span class="s2">{</span>
+                <span class="s0">double </span><span class="s1">new_subtotal </span><span class="s2">= </span><span class="s1">subtotal </span><span class="s2">- </span><span class="s1">discount_amount</span><span class="s2">;</span>
+                <span class="s0">double </span><span class="s1">tax_amount </span><span class="s2">= </span><span class="s1">compute_tax</span><span class="s2">(</span><span class="s1">new_subtotal</span><span class="s2">, </span><span class="s1">TAX_RATE</span><span class="s2">);</span>
+                <span class="s0">double </span><span class="s1">new_total </span><span class="s2">= </span><span class="s1">new_subtotal </span><span class="s2">+ </span><span class="s1">tax_amount</span><span class="s2">;</span>
+
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;\n--- Discount Preview ---&quot;</span><span class="s2">);</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">$&quot;You saved:      $</span><span class="s2">{</span><span class="s1">discount_amount:F2</span><span class="s2">}</span><span class="s4">&quot;</span><span class="s2">);</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">$&quot;New Subtotal:   $</span><span class="s2">{</span><span class="s1">new_subtotal:F2</span><span class="s2">}</span><span class="s4">&quot;</span><span class="s2">);</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">$&quot;Estimated Tax:  $</span><span class="s2">{</span><span class="s1">tax_amount:F2</span><span class="s2">}</span><span class="s4">&quot;</span><span class="s2">);</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">$&quot;Estimated Total:$</span><span class="s2">{</span><span class="s1">new_total:F2</span><span class="s2">}</span><span class="s4">&quot;</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+
+        <span class="s0">public static void </span><span class="s1">view_cart</span><span class="s2">()</span>
+        <span class="s2">{</span>
+            <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;\n--- Current Cart ---&quot;</span><span class="s2">);</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">item_names</span><span class="s2">.</span><span class="s1">Count </span><span class="s2">== </span><span class="s5">0</span><span class="s2">)</span>
+            <span class="s2">{</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;Your cart is empty.&quot;</span><span class="s2">);</span>
+                <span class="s0">return</span><span class="s2">;</span>
+            <span class="s2">}</span>
+
+            <span class="s3">// Composite Formatting for column alignment.</span>
+            <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;{0,-4} {1,-20} {2,10} {3,5} {4,10}&quot;</span><span class="s2">,</span>
+                              <span class="s4">&quot;No.&quot;</span><span class="s2">, </span><span class="s4">&quot;Item&quot;</span><span class="s2">, </span><span class="s4">&quot;Price&quot;</span><span class="s2">, </span><span class="s4">&quot;Qty&quot;</span><span class="s2">, </span><span class="s4">&quot;Total&quot;</span><span class="s2">);</span>
+            <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s0">new string</span><span class="s2">(</span><span class="s4">'-'</span><span class="s2">, </span><span class="s5">52</span><span class="s2">));</span>
+
+            <span class="s0">double </span><span class="s1">subtotal </span><span class="s2">= </span><span class="s1">compute_subtotal</span><span class="s2">();</span>
+            <span class="s0">double </span><span class="s1">most_expensive_price </span><span class="s2">= -</span><span class="s5">1.0</span><span class="s2">;</span>
+            <span class="s0">string </span><span class="s1">most_expensive_name </span><span class="s2">= </span><span class="s4">&quot;&quot;</span><span class="s2">;</span>
+
+            <span class="s0">for </span><span class="s2">(</span><span class="s0">int </span><span class="s1">i </span><span class="s2">= </span><span class="s5">0</span><span class="s2">; </span><span class="s1">i </span><span class="s2">&lt; </span><span class="s1">item_names</span><span class="s2">.</span><span class="s1">Count</span><span class="s2">; </span><span class="s1">i</span><span class="s2">++)</span>
+            <span class="s2">{</span>
+                <span class="s0">double </span><span class="s1">price </span><span class="s2">= </span><span class="s1">item_prices</span><span class="s2">[</span><span class="s1">i</span><span class="s2">];</span>
+                <span class="s0">int </span><span class="s1">qty </span><span class="s2">= </span><span class="s1">item_quantities</span><span class="s2">[</span><span class="s1">i</span><span class="s2">];</span>
+                <span class="s0">double </span><span class="s1">line_total </span><span class="s2">= </span><span class="s1">price </span><span class="s2">* </span><span class="s1">qty</span><span class="s2">;</span>
+
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;{0,-4} {1,-20} ${2,9:F2} {3,5} ${4,9:F2}&quot;</span><span class="s2">,</span>
+                                  <span class="s1">i </span><span class="s2">+ </span><span class="s5">1</span><span class="s2">, </span><span class="s1">item_names</span><span class="s2">[</span><span class="s1">i</span><span class="s2">], </span><span class="s1">price</span><span class="s2">, </span><span class="s1">qty</span><span class="s2">, </span><span class="s1">line_total</span><span class="s2">);</span>
+
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">price </span><span class="s2">&gt; </span><span class="s1">most_expensive_price</span><span class="s2">)</span>
+                <span class="s2">{</span>
+                    <span class="s1">most_expensive_price </span><span class="s2">= </span><span class="s1">price</span><span class="s2">;</span>
+                    <span class="s1">most_expensive_name </span><span class="s2">= </span><span class="s1">item_names</span><span class="s2">[</span><span class="s1">i</span><span class="s2">];</span>
+                <span class="s2">}</span>
+            <span class="s2">}</span>
+
+            <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s0">new string</span><span class="s2">(</span><span class="s4">'-'</span><span class="s2">, </span><span class="s5">52</span><span class="s2">));</span>
+            <span class="s0">double </span><span class="s1">tax_amount </span><span class="s2">= </span><span class="s1">compute_tax</span><span class="s2">(</span><span class="s1">subtotal</span><span class="s2">, </span><span class="s1">TAX_RATE</span><span class="s2">);</span>
+            <span class="s0">double </span><span class="s1">estimated_total </span><span class="s2">= </span><span class="s1">subtotal </span><span class="s2">+ </span><span class="s1">tax_amount</span><span class="s2">;</span>
+
+            <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;{0,-40} ${1,10:F2}&quot;</span><span class="s2">, </span><span class="s4">&quot;Subtotal:&quot;</span><span class="s2">, </span><span class="s1">subtotal</span><span class="s2">);</span>
+            <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;{0,-40} ${1,10:F2}&quot;</span><span class="s2">, </span><span class="s4">&quot;Tax:&quot;</span><span class="s2">, </span><span class="s1">tax_amount</span><span class="s2">);</span>
+            <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;{0,-40} ${1,10:F2}&quot;</span><span class="s2">, </span><span class="s4">&quot;Estimated Total:&quot;</span><span class="s2">, </span><span class="s1">estimated_total</span><span class="s2">);</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">subtotal </span><span class="s2">&gt; </span><span class="s5">0</span><span class="s2">)</span>
+            <span class="s2">{</span>
+                <span class="s0">double </span><span class="s1">average_line_total </span><span class="s2">= </span><span class="s1">subtotal </span><span class="s2">/ </span><span class="s1">item_names</span><span class="s2">.</span><span class="s1">Count</span><span class="s2">;</span>
+                <span class="s0">string </span><span class="s1">most_expensive_item_str </span><span class="s2">= </span><span class="s4">$&quot;</span><span class="s2">{</span><span class="s1">most_expensive_name</span><span class="s2">} </span><span class="s4">@ $</span><span class="s2">{</span><span class="s1">most_expensive_price:F2</span><span class="s2">}</span><span class="s4">&quot;</span><span class="s2">;</span>
+
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">$&quot;\nAverage Line Total: $</span><span class="s2">{</span><span class="s1">average_line_total:F2</span><span class="s2">}</span><span class="s4">&quot;</span><span class="s2">);</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">$&quot;Most Expensive Item: </span><span class="s2">{</span><span class="s1">most_expensive_item_str</span><span class="s2">}</span><span class="s4">&quot;</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+
+        <span class="s0">public static void </span><span class="s1">checkout</span><span class="s2">()</span>
+        <span class="s2">{</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">item_names</span><span class="s2">.</span><span class="s1">Count </span><span class="s2">== </span><span class="s5">0</span><span class="s2">)</span>
+            <span class="s2">{</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;Cannot check out, your cart is empty, cheapskate turdburglar!&quot;</span><span class="s2">);</span>
+                <span class="s0">return</span><span class="s2">;</span>
+            <span class="s2">}</span>
+
+            <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;\nCHECKOUT&quot;</span><span class="s2">);</span>
+            <span class="s0">double </span><span class="s1">subtotal </span><span class="s2">= </span><span class="s1">compute_subtotal</span><span class="s2">();</span>
+            <span class="s0">double </span><span class="s1">discount_amount </span><span class="s2">= </span><span class="s5">0.0</span><span class="s2">;</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">discount_applied_this_session</span><span class="s2">)</span>
+            <span class="s2">{</span>
+                <span class="s1">discount_amount </span><span class="s2">= </span><span class="s1">subtotal </span><span class="s2">* </span><span class="s1">DISCOUNT_RATE</span><span class="s2">;</span>
+            <span class="s2">}</span>
+
+            <span class="s0">double </span><span class="s1">subtotal_after_discount </span><span class="s2">= </span><span class="s1">subtotal </span><span class="s2">- </span><span class="s1">discount_amount</span><span class="s2">;</span>
+            <span class="s0">double </span><span class="s1">tax_amount </span><span class="s2">= </span><span class="s1">compute_tax</span><span class="s2">(</span><span class="s1">subtotal_after_discount</span><span class="s2">, </span><span class="s1">TAX_RATE</span><span class="s2">);</span>
+            <span class="s0">double </span><span class="s1">final_total </span><span class="s2">= </span><span class="s1">subtotal_after_discount </span><span class="s2">+ </span><span class="s1">tax_amount</span><span class="s2">;</span>
+
+            <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;\n--- RECEIPT ---&quot;</span><span class="s2">);</span>
+            <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">$&quot;Subtotal:       $</span><span class="s2">{</span><span class="s1">subtotal:F2</span><span class="s2">}</span><span class="s4">&quot;</span><span class="s2">);</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">discount_amount </span><span class="s2">&gt; </span><span class="s5">0</span><span class="s2">)</span>
+            <span class="s2">{</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">$&quot;Discount:      -$</span><span class="s2">{</span><span class="s1">discount_amount:F2</span><span class="s2">}</span><span class="s4">&quot;</span><span class="s2">);</span>
+            <span class="s2">}</span>
+
+            <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">$&quot;Tax:            $</span><span class="s2">{</span><span class="s1">tax_amount:F2</span><span class="s2">}</span><span class="s4">&quot;</span><span class="s2">);</span>
+            <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;-------------------&quot;</span><span class="s2">);</span>
+            <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">$&quot;TOTAL:          $</span><span class="s2">{</span><span class="s1">final_total:F2</span><span class="s2">}</span><span class="s4">&quot;</span><span class="s2">);</span>
+            <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">$&quot;\nThank you for visiting </span><span class="s2">{</span><span class="s1">CAFE_NAME</span><span class="s2">}</span><span class="s4">!&quot;</span><span class="s2">);</span>
+        <span class="s2">}</span>
+
+        <span class="s3">// ====================================================================</span>
+        <span class="s3">// 4. MAIN PROGRAM LOOP (User Interface)</span>
+        <span class="s3">// ====================================================================</span>
+
+        <span class="s0">public static void </span><span class="s1">main_menu</span><span class="s2">()</span>
+        <span class="s2">{</span>
+            <span class="s1">show_banner</span><span class="s2">();</span>
+
+            <span class="s0">while </span><span class="s2">(</span><span class="s0">true</span><span class="s2">) </span><span class="s3">// The C# infinite loop.</span>
+            <span class="s2">{</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;\n1) Add item&quot;</span><span class="s2">);</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;2) View cart&quot;</span><span class="s2">);</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;3) Remove item&quot;</span><span class="s2">);</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;4) Apply Discount&quot;</span><span class="s2">);</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;5) Clear Cart&quot;</span><span class="s2">);</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;6) Checkout&quot;</span><span class="s2">);</span>
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;7) Quit&quot;</span><span class="s2">);</span>
+
+                <span class="s1">Console</span><span class="s2">.</span><span class="s1">Write</span><span class="s2">(</span><span class="s4">&quot;Choose: &quot;</span><span class="s2">);</span>
+                <span class="s3">// Reading user input as a string.</span>
+                <span class="s0">string </span><span class="s1">choice </span><span class="s2">= </span><span class="s1">Console</span><span class="s2">.</span><span class="s1">ReadLine</span><span class="s2">();</span>
+
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">&quot;1&quot;</span><span class="s2">)</span>
+                <span class="s2">{</span>
+                    <span class="s1">Console</span><span class="s2">.</span><span class="s1">Write</span><span class="s2">(</span><span class="s4">&quot;Item name: &quot;</span><span class="s2">);</span>
+                    <span class="s0">string </span><span class="s1">item_name </span><span class="s2">= </span><span class="s1">Console</span><span class="s2">.</span><span class="s1">ReadLine</span><span class="s2">();</span>
+
+                    <span class="s3">// The try-catch block handles type conversion errors.</span>
+                    <span class="s0">try</span>
+                    <span class="s2">{</span>
+                        <span class="s1">Console</span><span class="s2">.</span><span class="s1">Write</span><span class="s2">(</span><span class="s4">&quot;Item price: &quot;</span><span class="s2">);</span>
+                        <span class="s3">// .Parse() converts string to double.</span>
+                        <span class="s0">double </span><span class="s1">item_price </span><span class="s2">= </span><span class="s0">double</span><span class="s2">.</span><span class="s1">Parse</span><span class="s2">(</span><span class="s1">Console</span><span class="s2">.</span><span class="s1">ReadLine</span><span class="s2">());</span>
+
+                        <span class="s1">Console</span><span class="s2">.</span><span class="s1">Write</span><span class="s2">(</span><span class="s4">&quot;Quantity: &quot;</span><span class="s2">);</span>
+                        <span class="s3">// .Parse() converts string to int.</span>
+                        <span class="s0">int </span><span class="s1">item_qty </span><span class="s2">= </span><span class="s0">int</span><span class="s2">.</span><span class="s1">Parse</span><span class="s2">(</span><span class="s1">Console</span><span class="s2">.</span><span class="s1">ReadLine</span><span class="s2">());</span>
+
+                        <span class="s1">add_item</span><span class="s2">(</span><span class="s1">item_name</span><span class="s2">, </span><span class="s1">item_price</span><span class="s2">, </span><span class="s1">item_qty</span><span class="s2">);</span>
+                    <span class="s2">}</span>
+                    <span class="s0">catch </span><span class="s2">(</span><span class="s1">FormatException</span><span class="s2">)</span>
+                    <span class="s2">{</span>
+                        <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;Invalid input. Price and quantity must be numbers.&quot;</span><span class="s2">);</span>
+                    <span class="s2">}</span>
+                <span class="s2">}</span>
+
+                <span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">&quot;2&quot;</span><span class="s2">)</span>
+                <span class="s2">{</span>
+                    <span class="s1">view_cart</span><span class="s2">();</span>
+                <span class="s2">}</span>
+
+                <span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">&quot;3&quot;</span><span class="s2">)</span>
+                <span class="s2">{</span>
+                    <span class="s0">if </span><span class="s2">(</span><span class="s1">item_names</span><span class="s2">.</span><span class="s1">Count </span><span class="s2">== </span><span class="s5">0</span><span class="s2">)</span>
+                    <span class="s2">{</span>
+                        <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;Your cart is empty. Nothing to remove.&quot;</span><span class="s2">);</span>
+                        <span class="s0">continue</span><span class="s2">;</span>
+                    <span class="s2">}</span>
+                    <span class="s0">try</span>
+                    <span class="s2">{</span>
+                        <span class="s1">Console</span><span class="s2">.</span><span class="s1">Write</span><span class="s2">(</span><span class="s4">&quot;Enter item number to remove: &quot;</span><span class="s2">);</span>
+                        <span class="s0">int </span><span class="s1">item_num </span><span class="s2">= </span><span class="s0">int</span><span class="s2">.</span><span class="s1">Parse</span><span class="s2">(</span><span class="s1">Console</span><span class="s2">.</span><span class="s1">ReadLine</span><span class="s2">());</span>
+                        <span class="s1">remove_item</span><span class="s2">(</span><span class="s1">item_num</span><span class="s2">);</span>
+                    <span class="s2">}</span>
+                    <span class="s0">catch </span><span class="s2">(</span><span class="s1">FormatException</span><span class="s2">)</span>
+                    <span class="s2">{</span>
+                        <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;Invalid input. Please enter a valid number!&quot;</span><span class="s2">);</span>
+                    <span class="s2">}</span>
+                <span class="s2">}</span>
+
+                <span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">&quot;4&quot;</span><span class="s2">)</span>
+                <span class="s2">{</span>
+                    <span class="s1">apply_discount_from_menu</span><span class="s2">();</span>
+                <span class="s2">}</span>
+
+                <span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">&quot;5&quot;</span><span class="s2">)</span>
+                <span class="s2">{</span>
+                    <span class="s1">clear_cart</span><span class="s2">();</span>
+                <span class="s2">}</span>
+
+                <span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">&quot;6&quot;</span><span class="s2">)</span>
+                <span class="s2">{</span>
+                    <span class="s1">checkout</span><span class="s2">();</span>
+                    <span class="s0">break</span><span class="s2">; </span><span class="s3">// Exits the loop and ends the program.</span>
+                <span class="s2">}</span>
+
+                <span class="s0">else if </span><span class="s2">(</span><span class="s1">choice </span><span class="s2">== </span><span class="s4">&quot;7&quot;</span><span class="s2">)</span>
+                <span class="s2">{</span>
+                    <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">$&quot;Goodbye! Thank you for using the </span><span class="s2">{</span><span class="s1">CAFE_NAME</span><span class="s2">} </span><span class="s4">manager.&quot;</span><span class="s2">);</span>
+                    <span class="s0">break</span><span class="s2">; </span><span class="s3">// Exits the loop and ends the program.</span>
+                <span class="s2">}</span>
+
+                <span class="s0">else</span>
+                <span class="s2">{</span>
+                    <span class="s1">Console</span><span class="s2">.</span><span class="s1">WriteLine</span><span class="s2">(</span><span class="s4">&quot;Invalid choice. Please enter a number from 1 to 7.&quot;</span><span class="s2">);</span>
+                <span class="s2">}</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+<span class="s2">}</span></pre>
+</body>
+</html>

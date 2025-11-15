@@ -1,0 +1,14 @@
+/Users/sofakingdomstudio/RiderProjects/CafeManager/Yo_Mommas/cafe_manager/obj/Debug/net9.0/cafe_manager.GeneratedMSBuildEditorConfig.editorconfig
+/Users/sofakingdomstudio/RiderProjects/CafeManager/Yo_Mommas/cafe_manager/obj/Debug/net9.0/cafe_manager.AssemblyInfoInputs.cache
+/Users/sofakingdomstudio/RiderProjects/CafeManager/Yo_Mommas/cafe_manager/obj/Debug/net9.0/cafe_manager.AssemblyInfo.cs
+/Users/sofakingdomstudio/RiderProjects/CafeManager/Yo_Mommas/cafe_manager/obj/Debug/net9.0/cafe_manager.csproj.CoreCompileInputs.cache
+/Users/sofakingdomstudio/RiderProjects/CafeManager/Yo_Mommas/cafe_manager/bin/Debug/net9.0/cafe_manager
+/Users/sofakingdomstudio/RiderProjects/CafeManager/Yo_Mommas/cafe_manager/bin/Debug/net9.0/cafe_manager.deps.json
+/Users/sofakingdomstudio/RiderProjects/CafeManager/Yo_Mommas/cafe_manager/bin/Debug/net9.0/cafe_manager.runtimeconfig.json
+/Users/sofakingdomstudio/RiderProjects/CafeManager/Yo_Mommas/cafe_manager/bin/Debug/net9.0/cafe_manager.dll
+/Users/sofakingdomstudio/RiderProjects/CafeManager/Yo_Mommas/cafe_manager/bin/Debug/net9.0/cafe_manager.pdb
+/Users/sofakingdomstudio/RiderProjects/CafeManager/Yo_Mommas/cafe_manager/obj/Debug/net9.0/cafe_manager.dll
+/Users/sofakingdomstudio/RiderProjects/CafeManager/Yo_Mommas/cafe_manager/obj/Debug/net9.0/refint/cafe_manager.dll
+/Users/sofakingdomstudio/RiderProjects/CafeManager/Yo_Mommas/cafe_manager/obj/Debug/net9.0/cafe_manager.pdb
+/Users/sofakingdomstudio/RiderProjects/CafeManager/Yo_Mommas/cafe_manager/obj/Debug/net9.0/cafe_manager.genruntimeconfig.cache
+/Users/sofakingdomstudio/RiderProjects/CafeManager/Yo_Mommas/cafe_manager/obj/Debug/net9.0/ref/cafe_manager.dll
